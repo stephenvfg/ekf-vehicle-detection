@@ -1,4 +1,5 @@
 #include "kalman_filter.h"
+#include <iostream>
 
 using Eigen::MatrixXd;
 using Eigen::VectorXd;
@@ -29,6 +30,7 @@ void KalmanFilter::Predict() {
 }
 
 void KalmanFilter::Update(const VectorXd &z) {
+  // Using KalmanFilter for linear functions - LIDAR
   VectorXd z_pred = H_ * x_;
   VectorXd y = z - z_pred;
   MatrixXd Ht = H_.transpose();
@@ -45,7 +47,37 @@ void KalmanFilter::Update(const VectorXd &z) {
 }
 
 void KalmanFilter::UpdateEKF(const VectorXd &z) {
-  /**
-   * TODO: update the state by using Extended Kalman Filter equations
-   */
+  // Convert p and v --> rho, phi, rhodot
+  double px = x_[0];
+  double py = x_[1];
+  double vx = x_[2];
+  double vy = x_[3];
+  
+  // Prevent division by zero
+  if (px == 0) {
+    px = 0.00001;
+    std::cout << "ALERT in KalmanFilter::UpdateEKF -> Converted px = 0 -> 0.00001" << std::endl;
+  }
+  
+  double rho = sqrt(px*px + py*py);
+  double phi = atan(py/px);
+  double rhodot = (px*vx + py*vy)/rho;
+  
+  // Create a new z_pred for non-linear functions
+  VectorXd z_pred = VectorXd(3);
+  z_pred << rho, phi, rhodot;
+  
+  // Update the Kalman Filter business as usual
+  VectorXd y = z - z_pred;
+  MatrixXd Ht = H_.transpose();
+  MatrixXd S = H_ * P_ * Ht + R_;
+  MatrixXd Si = S.inverse();
+  MatrixXd PHt = P_ * Ht;
+  MatrixXd K = PHt * Si;
+
+  // Calculate new estimate
+  x_ = x_ + (K * y);
+  long x_size = x_.size();
+  MatrixXd I = MatrixXd::Identity(x_size, x_size);
+  P_ = (I - K * H_) * P_;
 }

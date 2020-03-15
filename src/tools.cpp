@@ -53,12 +53,12 @@ MatrixXd Tools::CalculateJacobian(const VectorXd& x_state) {
   }
   
   // Calculate helper variable
-  float pxy = px*px+py*py;
+  float pxy = px*px + py*py;
   
   // Compute the Jacobian matrix
   Hj << px/sqrt(pxy), py/sqrt(pxy), 0, 0,
     (-1*py)/(pxy), px/(pxy), 0, 0,
-    py*(vx*py-vy*px)/pow(pxy, 3/2), px*(vy*px-vx*py)/pow(pxy, 3/2), px/sqrt(pxy), py/sqrt(pxy);
+    py*(vx*py - vy*px)/pow(pxy, 3/2), px*(vy*px - vx*py)/pow(pxy, 3/2), px/sqrt(pxy), py/sqrt(pxy);
 
   return Hj;
 }
