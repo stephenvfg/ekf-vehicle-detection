@@ -53,22 +53,30 @@ void KalmanFilter::UpdateEKF(const VectorXd &z) {
   double vx = x_[2];
   double vy = x_[3];
   
-  // Prevent division by zero
-  if (px == 0) {
-    px = 0.00001;
-    std::cout << "ALERT in KalmanFilter::UpdateEKF -> Converted px = 0 -> 0.00001" << std::endl;
+  // Prevent any division by zero (or division by extremely small values)
+  double rho = sqrt(px*px + py*py);
+  if (fabs(rho) < 0.001) {
+    std::cout << "ALERT in KalmanFilter::UpdateEKF -> Division by Zero" << std::endl;
+    rho = 0.001;
   }
   
-  double rho = sqrt(px*px + py*py);
-  double phi = atan(py/px);
+  double phi = atan2(py, px);
   double rhodot = (px*vx + py*vy)/rho;
   
   // Create a new z_pred for non-linear functions
   VectorXd z_pred = VectorXd(3);
   z_pred << rho, phi, rhodot;
   
-  // Update the Kalman Filter business as usual
+  // Calculate y and adjust Phi to be between the accepted range of (-pi, pi)
+  double pi_approx = 3.14159265358979323846;
   VectorXd y = z - z_pred;
+  while (fabs(y[1]) > pi_approx) {
+    std::cout << "ALERT in KalmanFilter::UpdateEKF -> Phi out of range" << std::endl;
+    if (y[1] > pi_approx) { y[1] -= 2*pi_approx; }
+    else { y[1] += 2*pi_approx; }
+  }
+  
+  // Update the Kalman Filter business as usual
   MatrixXd Ht = H_.transpose();
   MatrixXd S = H_ * P_ * Ht + R_;
   MatrixXd Si = S.inverse();

@@ -98,7 +98,8 @@ void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
     }
     
     // initialize the state
-    ekf_.x_ << px, py, 0, 0;
+    ekf_.x_ << px, py, 1, 1;
+    previous_timestamp_ = measurement_pack.timestamp_;
     is_initialized_ = true;
     cout << "EKF: Done initializing" << endl;
     return;
