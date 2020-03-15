@@ -6,7 +6,7 @@
 
 This repository contains the files for a project from the [Udacity Self Driving Car Nanodegree Program](https://www.udacity.com/course/self-driving-car-engineer-nanodegree--nd013). The goal of this project was to track and predict vehicle movement using a fusion of LIDAR and RADAR data processed with an Extended Kalman Filter.
 
-<img src="https://github.com/stephenvfg/ekf-vehicle-detection/blob/master/ekf_flow.png" width="500px">
+<img src="https://github.com/stephenvfg/ekf-vehicle-detection/blob/master/ekf_flow.png" width="700px">
 
 The project code was compiled and used in tandem with a simulator from Udacity that mapped out the vehicle's movement along with the EKF's predictions. RMSE (error) values were computed simultaneously to assist in understanding the accuracy of the sensor data and EKF performance.
 
@@ -14,7 +14,7 @@ The project code was compiled and used in tandem with a simulator from Udacity t
 
 ### First Dataset
 
-<img src="https://github.com/stephenvfg/ekf-vehicle-detection/blob/master/dataset_1.png" width="500px">
+<img src="https://github.com/stephenvfg/ekf-vehicle-detection/blob/master/dataset_1.png" width="700px">
 
 | X-position RMSE | Y-position RMSE | X-velocity RMSE | Y-velocity RMSE |
 | --------------- | --------------- | --------------- | --------------- |
@@ -22,7 +22,7 @@ The project code was compiled and used in tandem with a simulator from Udacity t
 
 ### Second Dataset
 
-<img src="https://github.com/stephenvfg/ekf-vehicle-detection/blob/master/dataset_2.png" width="500px">
+<img src="https://github.com/stephenvfg/ekf-vehicle-detection/blob/master/dataset_2.png" width="700px">
 
 | X-position RMSE | Y-position RMSE | X-velocity RMSE | Y-velocity RMSE |
 | --------------- | --------------- | --------------- | --------------- |
